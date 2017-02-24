@@ -21,14 +21,6 @@ Bubble.prototype.color = function(r,b,g){
   };
 }
 
-Bubble.prototype.jitter = function(xneg,xpos,yneg,ypos){
-  this.move = function() {
-    this.x = this.x + random(xneg, xpos);
-    this.y = this.y + random(yneg, ypos);
-  };
-  return this.move();
-}
-
 Bubble.prototype.avoid = function(mouseX, mouseY, cubeSize, runAwaySpeed){
   if(this.x < mouseX + cubeSize && this.x > mouseX - cubeSize && this.y < mouseY + cubeSize && this.y > mouseY - cubeSize ){
     if(this.x < mouseX ){
@@ -73,11 +65,11 @@ function message(){
   text("congrats!",width/2,height/1.5);
 }
 
+
 function draw() {
   background(0);
   message();
   for (var i = 0; i < bubbles.length; i++) {
-//    bubbles[i].jitter(-random(10),random(10),-random(10),random(10));
 //    bubbles[i].move();
     bubbles[i].avoid(mouseX, mouseY, 75, 45);
     bubbles[i].display();
