@@ -1,27 +1,34 @@
 var bubbles = [];
+var MAX_BUBBLES = 1750;
+var YOU_COLOR;
+var WIN_COLOR;
+var CONGRAT_COLOR;
+
+
+
 function Bubble () {
       this.x = random(0, width);
       this.y = random(0, height);
-      this.display = function() {
-        stroke(255);
-        noFill();
-        ellipse(this.x, this.y, 24, 24);
-      };
-      this.move = function() {
-        this.x = this.x + random(-1, 1);
-        this.y = this.y + random(-1, 1);
-      }
+}
+
+Bubble.prototype.display = function(){
+  stroke(this.r,this.b,this.g);
+  fill(this.r,this.b,this.g);
+  ellipse(this.x, this.y, 24);
+}
+
+Bubble.prototype._move = function(){
+  this.x = this.x + random(-1, 1);
+  this.y = this.y + random(-1, 1);
 }
 
 Bubble.prototype.color = function(r,b,g){
-  this.display = function() {
-    stroke(r,b,g);
-    fill(r,b,g);
-    ellipse(this.x, this.y, 24, 24);
-  };
+  this.r = r;
+  this.b = b;
+  this.g = g;
 }
 
-Bubble.prototype.avoid = function(mouseX, mouseY, cubeSize, runAwaySpeed){
+Bubble.prototype.coalesce = function(mouseX, mouseY, cubeSize, runAwaySpeed){
   if(this.x < mouseX + cubeSize && this.x > mouseX - cubeSize && this.y < mouseY + cubeSize && this.y > mouseY - cubeSize ){
     if(this.x < mouseX ){
       this.x = this.x + random(runAwaySpeed);
@@ -37,15 +44,18 @@ Bubble.prototype.avoid = function(mouseX, mouseY, cubeSize, runAwaySpeed){
     }
   //  this.color(125,255,125);
   } else{
-    return this.move();
+    return this._move();
   }
 
 }
 
 function setup() {
   createCanvas(600, 400);
+  YOU_COLOR = color(125,255,0,175);
+  WIN_COLOR = color(125,0,255,175);
+  CONGRAT_COLOR = color(125,255,0,175);
   //object definition in setup
-  for (var i = 0; i < 1750; i++) {
+  for (var i = 0; i < MAX_BUBBLES; i++) {
      bubbles[i] = new Bubble();
      bubbles[i].color(random(255),random(255),random(255));
   }
@@ -54,14 +64,20 @@ function setup() {
 
 function message(){
   textSize(72);
+
   textAlign(RIGHT);
-  fill(255,0,0,10)
+  stroke(YOU_COLOR);
+  fill(YOU_COLOR);
   text("you",width/3,height/4);
-  fill(0, 102, 153,10);
+
   textAlign(CENTER);
+  stroke(WIN_COLOR);
+  fill(WIN_COLOR);
   text("win,",width/3,height/2);
-  fill(0, 102, 153, 10);
+
   textAlign(LEFT);
+  stroke(CONGRAT_COLOR);
+  fill(CONGRAT_COLOR);
   text("congrats!",width/2,height/1.5);
 }
 
@@ -69,9 +85,9 @@ function message(){
 function draw() {
   background(0);
   message();
-  for (var i = 0; i < bubbles.length; i++) {
-//    bubbles[i].move();
-    bubbles[i].avoid(mouseX, mouseY, 75, 45);
+  for (var i = 0; i < MAX_BUBBLES; i++) {
+//    bubbles[i]._move();
+    bubbles[i].coalesce(mouseX, mouseY, 75, 45);
     bubbles[i].display();
 
   }
