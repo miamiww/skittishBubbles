@@ -56,9 +56,8 @@ function setup() {
   for (var i = 0; i < 1750; i++) {
      bubbles[i] = new Bubble();
      bubbles[i].color(random(255),random(255),random(255));
-//     bubbles[i].jitter();
   }
-  frameRate(60);
+//  frameRate(60);
 }
 
 function message(){
